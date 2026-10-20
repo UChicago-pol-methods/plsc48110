@@ -22,16 +22,9 @@ in [slides/assets](slides/assets/).
 ## Syllabus and readings
 
 - [Syllabus PDF](syllabus/syllabus.pdf) and [LaTeX source](syllabus/syllabus.tex).
-- [Reading bibliography](syllabus/readings.bib): 48 unique entries covering
-  required, reference, optional, and other readings, supplementary materials,
-  and linked background articles.
+- [Reading bibliography](syllabus/readings.bib)
 - [Syllabus editing and bibliography notes](syllabus/README.md).
 
-The syllabus retains the readings, assignments, grade weights, policies,
-week/class order, and relative deadlines. Calendar dates and offering-specific
-logistics are omitted. Fill in the named logistics fields near the top of the
-LaTeX source for a future offering. The introduction deck links to the syllabus
-PDF; keep the `slides/` and `syllabus/` directories together.
 
 ## Rebuilding
 

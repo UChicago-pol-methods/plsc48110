@@ -1,6 +1,6 @@
 # Reusable syllabus
 
-The [syllabus PDF](syllabus.pdf) is ready to use. Edit
+Edit
 [syllabus.tex](syllabus.tex), then run from this directory:
 
 ```sh
@@ -50,20 +50,3 @@ The bibliography uses standard BibTeX entry types and is also readable by
 Add `\nocite{*}` before those commands to list every entry. The current syllabus
 formats its reading list directly in LaTeX; editing the BibTeX file does not
 automatically update that list.
-
-### Publication and version notes
-
-- Levitt and List uses the journal issue year 2009; the syllabus says 2008.
-- The Belmont Report uses 1979, the date of the linked HHS edition; the syllabus
-  says 1978.
-- The linked Data Colada series began in November 2022; the syllabus says 2019.
-- Complete author lists and compound surnames follow publication metadata.
-- Blattman et al. retains the January 2022 NBER working paper and links to its
-  archived first version. The syllabus's OSF link is retained in `relatedurl`.
-- Athey et al. (2021) records the World Bank paper identified by the supplied
-  DOI, with the parallel Stanford paper number in a note.
-- Bowles and Gintis (2004) and de Figueiredo et al. (2011) retain the assigned
-  manuscript versions rather than later publications.
-
-Differences from the syllabus are also documented in comments within
-[readings.bib](readings.bib).
