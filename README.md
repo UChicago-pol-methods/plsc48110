@@ -2,14 +2,8 @@
 
 **Lab and Field Experiments in Comparative Politics and Policy**
 
-Undated, editable course materials: eight ordered lecture handouts, a reusable
-syllabus, and a bibliography of the readings. Compiled PDFs are ready to use.
 
 ## Lecture handouts
-
-Each deck includes a LaTeX source and a PDF with the full content visible,
-without incremental pauses or reveal pages. Offering dates and quarter labels
-have been removed; dates within teaching examples and references are retained.
 
 | Order | Topic | Syllabus week | Files |
 | --- | --- | --- | --- |
@@ -22,8 +16,7 @@ have been removed; dates within teaching examples and references are retained.
 | 07 | Instrumental variables | 8 | [PDF](slides/07-instrumental-variables.pdf) · [TeX](slides/07-instrumental-variables.tex) |
 | 08 | Heterogeneous treatment effects and machine learning | 9 | [PDF](slides/08-heterogeneous-treatment-effects.pdf) · [TeX](slides/08-heterogeneous-treatment-effects.tex) |
 
-Lecture numbers indicate deck order, not syllabus weeks. This set has no lecture
-deck for Week 7 (spillovers). Figures, bibliography, and style files are included
+Figures, bibliography, and style files are included
 in [slides/assets](slides/assets/).
 
 ## Syllabus and readings
