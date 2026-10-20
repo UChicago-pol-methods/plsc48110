@@ -1,0 +1,16 @@
+.DS_Store
+.build/
+
+# TeX build products; keep the distributed PDFs and editable sources.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.vrb

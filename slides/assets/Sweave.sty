@@ -1,0 +1,88 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Sweave}{}
+
+\RequirePackage{ifthen}
+\newboolean{Sweave@gin}
+\setboolean{Sweave@gin}{true}
+\newboolean{Sweave@ae}
+\setboolean{Sweave@ae}{true}
+
+\DeclareOption{nogin}{\setboolean{Sweave@gin}{false}}
+\DeclareOption{noae}{\setboolean{Sweave@ae}{false}}
+\ProcessOptions
+
+\RequirePackage{graphicx,listings,fancyvrb,color,relsize,ae,sourcecodepro}
+\IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
+\providecommand{\Sweavesize}{\small}
+\providecommand{\Routsize}{\Sweavesize}
+\providecommand{\Rcolor}{\color[rgb]{0, .2, .4}}
+\providecommand{\Routcolor}{\color[rgb]{0.261, 0.039, 0.055}}
+\providecommand{\Rcommentcolor}{\color[rgb]{0, 0.5, 0}}
+
+\providecommand{\Rbackground}{\color[gray]{0.93}}
+\providecommand{\Routbackground}{\color[gray]{0.97}}
+% Can specify \color[gray]{1} for white background or just \color{white}
+
+
+\lstdefinestyle{Rstyle}{fancyvrb=false,escapechar=`,language=R,%
+                        basicstyle={\bfseries\ttfamily\Sweavesize},% some want \ttfamily too
+                        backgroundcolor=\Rbackground,%
+                        showstringspaces=false,%
+                        keywordstyle={%
+                        \bfseries\ttfamily\Rcolor},%
+                        commentstyle={\Rcommentcolor},%
+                        xleftmargin=.3in,%
+ 						  xrightmargin=.3in,%
+ 						  frame=single,%
+ 						  framesep=5pt,%
+ 						  rulecolor=\Rbackground,%
+                        literate={<-}{{$\!\leftarrow\>$}}2{<<-}{{$\!\twoheadleftarrow\>$}}2{~}{{$\!\sim\>$}}1{<=}{{$\!\leq\>$}}2{>=}{{$\!\geq\>$}}2{^}{{$^{\scriptstyle\wedge}\>$}}1,%
+                        alsoother={$},%
+                        alsoletter={.<-},%,
+                        breaklines=true,
+                        columns=fullflexible,
+                        otherkeywords={!,!=,~,$,*,\&,\%/\%,\%*\%,\%\%,<-,<<-,/,head},
+                        escapeinside={(*}{*)}}%
+% Other options of interest:
+% frame=single,framerule=0.1pt,framesep=1pt,rulecolor=\color{blue},
+% numbers=left,numberstyle=\tiny,stepnumber=1,numbersep=7pt,
+% keywordstyle={\bf\Rcolor}
+
+\lstdefinestyle{Routstyle}{fancyvrb=false,literate={~}{{$\sim$}}1{R^2}{{$R^{2}$}}2{^}{{$^{\scriptstyle\wedge}$}}1{R-squared}{{$R^{2}$}}2,%
+ frame=single,%
+ xleftmargin=0in,%
+ xrightmargin=0in,%
+ framerule=0.1pt,rulecolor=\Rbackground,%
+ framesep=5pt,basicstyle=\Routcolor\Routsize\ttfamily\bfseries,%
+ backgroundcolor=\Routbackground
+ }
+
+\newenvironment{Schunk}{}{}
+\lstnewenvironment{Sinput}{\lstset{style=Rstyle}}{}
+\lstnewenvironment{Scode}{\lstset{style=Rstyle}}{}
+\lstnewenvironment{Soutput}{\lstset{style=Routstyle}}{}
+\lstnewenvironment{Sinputsmall}{%
+ \lstset{style=Rstyle,basicstyle={\small}}}{}
+\lstnewenvironment{Sinputsmaller}{%
+ \lstset{style=Rstyle,basicstyle={\smaller}}}{}
+
+
+\ifthenelse{\boolean{Sweave@gin}}{\setkeys{Gin}{width=0.6\textwidth}}{}%
+\ifthenelse{\boolean{Sweave@ae}}{%
+  \RequirePackage[T1]{fontenc}  
+  \RequirePackage{ae}
+}{}%
+
+
+\newcommand{\Sconcordance}[1]{%
+  \ifx\pdfoutput\undefined%
+  \csname newcount\endcsname\pdfoutput\fi%
+  \ifcase\pdfoutput\special{#1}%
+  \else%
+   \begingroup%
+     \pdfcompresslevel=0%
+     \immediate\pdfobj stream{#1}%
+     \pdfcatalog{/SweaveConcordance \the\pdflastobj\space 0 R}%
+   \endgroup%
+  \fi}
+

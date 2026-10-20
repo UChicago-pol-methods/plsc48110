@@ -1,0 +1,920 @@
+\documentclass[xcolor={dvipsnames},handout]{beamer}
+
+\usepackage{assets/pres-template_MOW}
+\usepackage{pdfpages}
+
+%--------------------------------------------------------------------------
+% Specific to this document ---------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%--------------------------------------------------------------------------
+% \setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\tabcolsep}{1.3pt}
+\title{PLSC 48110/28110}
+\subtitle{Lecture 8: Heterogeneous treatment effects and machine learning}
+\date{}
+\author{Molly Offer-Westort}
+\institute{Department of Political Science, \\University of Chicago}
+
+
+\usepackage{assets/Sweave}
+\hypersetup{pdftitle={PLSC 48110/28110 - Lecture 8: Heterogeneous treatment effects and machine learning},pdfauthor={Molly Offer-Westort},pdfpagemode=UseNone}
+\begin{document}
+
+%-------------------------------------------------------------------------------%
+\frame{\titlepage
+\thispagestyle{empty}
+}
+
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{Loading packages for this class}
+
+\begin{Schunk}
+\begin{Sinput}
+> set.seed(60637)
+> library(ggplot2)
+\end{Sinput}
+\end{Schunk}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxx
+\end{itemize}
+
+
+}
+
+
+
+
+%-------------------------------------------------------------------------------%
+% Empty housekeeping frame omitted from the reusable handout.
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item  xxxx
+\end{itemize}
+\~\n}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Estimation of heterogeneous treatment effects}
+
+
+\begin{itemize}
+\item Beyond questions about the ATE, we may have additional questions when running an experiment
+\begin{itemize}
+\item Are specific subgroups, such as the most vulnerable subjects, affected differently by the intervention? 
+\item Is there a subgroup that is particularly helped by the intervention?
+\item Is there a subgroup that is \textit{harmed} by the intervention? 
+\item If we have a limited budget, how can we allocate treatment to maximize outcomes?
+\end{itemize}
+\item We may know what subgroups we are interested in ex-ante. 
+\item Or we may want to use data-driven methods to discover the subgroups most affected by our intervention. 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{When subgroups are pre-determined}
+
+\begin{itemize}
+\item If you already know your subgroups, for example, students who are classified as female vs. otherwise 
+\item And you just want to test a simple hypothesis of the form
+\begin{align*}
+H_0 & : &  \tau(x) = \tau(x')\\
+H_0 & : &  \tau(x) \neq \tau(x')
+\end{align*}
+
+\item You can compare simple differences in subgroup treatment effects. 
+\begin{align*}
+\left( \E[Y_i(1) - Y_i(0) | X_i = x]\right)- \\
+\left( \E[Y_i(1) - Y_i(0) | X_i = x']\right)
+\end{align*}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{When subgroups are pre-determined}
+
+
+
+\begin{itemize}
+\item With random assignment, we can just compare differences in differences in means across the two groups
+\begin{align*}
+\left( \E[Y_i^{obs} | W_i = 1, X_i = x] - \E[Y_i^{obs} | W_i = 0, X_i = x]\right)- \\
+\left( \E[Y_i^{obs} | W_i = 1, X_i = x'] - \E[Y_i^{obs} | W_i = 0, X_i = x']\right)
+\end{align*}
+ 
+\item Where for each subgroup, you can estimate as the difference in average outcomes among individuals under treatment vs. control. 
+\[
+\hat \tau_x  = \bar Y^{obs}_{1, x} - \bar Y^{obs}_{0, x}
+\]
+
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{When subgroups are pre-determined}
+
+
+
+\begin{itemize}
+\item You can also use a linear model; this will return the same estimate  
+\begin{align*}
+\hat Y_i = \hat \beta_0 + \hat \beta_1 W_i + \hat \beta_2 W_i\times (X_i=x) + \hat \beta_3 (X_i=x)
+\end{align*}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+
+\begin{frame}{When subgroups are pre-determined}
+
+
+
+\begin{itemize}
+\item If you have many subgroups, you may not want to run tests for all of them separately, as you can run into issues with multiple testing 
+\item There are test corrections for this, but they usually operate under the assumption that your tests are independent  (why might they not be?) 
+\item Instead, you could include them all in the same model
+\begin{align*}
+\hat Y_i = \hat \beta_0 + \hat \beta_1 D_i + \sum_{k = 1}^K \left( \hat \gamma_k \hat W_i\times (X_{ki}=x_{ki}) + \hat\delta_k (X_{ki}=x_{ki})\right)
+\end{align*}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{When subgroups are not pre-determined}
+
+\begin{itemize}
+\item You might be interested instead in answering the question, "Is there any treatment effect heterogeneity?"  or 
+\item \text{Which} group benefits the most from the program? 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}%{Frametitle}
+
+\begin{itemize}
+\item For a broader range of questions, we might want to be able to model 
+\[
+\tau(x) = \E [Y_i(1) - Y_i(0) | X = x] 
+\]
+
+\item If all covariates are discrete and there are few of them, we can fit a fully interacted regression model, as before. 
+\item But when there are a lot of covariates and/or they are continuous, we may want to have a more flexible estimation method. 
+\item Machine learning methods can be helpful to address data-driven problems. 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+
+
+\begin{frame}{Machine learning}
+
+What is it?
+\begin{itemize}
+\item A body of \textit{algorithmic} methods \dots  (an algorithm is just a recipe)
+\item Somehow part of \textit{artificial intelligence}\dots  (basically, how computers perform tasks)
+\item In general, a flexible, \textit{data-driven} approach to make predictions, classify data, or take decisions.
+\end{itemize}
+
+\nocite{athey2019machine}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Machine learning}
+
+How do the objectives of machine learning differ from those of conventional quantitative methods in the social sciences?
+\begin{itemize}
+\item In conventional quantitative methods:
+\begin{itemize}
+\item identify and estimate a target estimand, which is often a parameter in a statistical model,  defined over some specified population of interest.
+\item descriptive or causal, e.g., population employment rate, or effect of a policy
+\end{itemize}
+\item In ML:
+\begin{itemize}
+\item development of algorithms to make classifications or predictions. 
+\item e.g., is this a picture of banana or a cat?  Will this person be more likely to click on an ad for sneakers or cookware?
+\end{itemize}
+\item Is there overlap between the two?
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Model fit vs. prediction}
+
+
+\begin{itemize}
+\item In linear regression, propose a model:
+$$ \hat{Y}_i = \hat{\beta}_0 +  \hat{\beta}_1 X_{1i} + \hat{\beta}_2 X_{2i} + \dots + \hat{\beta}_K X_{Ki} $$
+\item Select $\hat \beta_0 \dots \hat\beta_K$ to minimize 
+$$
+\sum_{i = 1}^N \hat{\varepsilon_i}^2 = \sum_{i = 1}^N\left(\hat{Y}_i - Y_i\right)^2
+$$
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Model fit vs. prediction}
+
+
+\begin{itemize}
+\item For prediction tasks, we could use the same model, 
+$$ \hat{Y}_i = \hat{\beta}_0 +  \hat{\beta}_1 X_{1i} + \hat{\beta}_2 X_{2i} + \dots + \hat{\beta}_K X_{Ki} $$
+\item But select $\hat \beta_0 \dots \hat\beta_K$ to minimize squared prediction error for the next observation:
+$$
+\hat{\varepsilon}_{N+1}^2 = \left(\hat{Y}_{N + 1} - Y_{N +1}\right)^2
+$$
+\item Are these the same thing?  (no)
+\item If prediction is our goal, can we do better than least squares regression?  (yes)
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Some ML tools}
+
+\begin{itemize}
+\item A major concern of ML: \textit{overfit}
+\begin{itemize}
+\item If your model fits the data \textit{too} perfectly, it's not useful for prediction
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]
+
+Suppose we would like to fit a model to the following data:
+\begin{figure}
+\centering
+{
+\includegraphics{assets/slides_91-003}
+}
+\end{figure}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]
+
+We could use a single line:
+\begin{figure}
+\centering
+{
+\includegraphics{assets/slides_91-004}
+}
+\end{figure}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]
+
+Or we could fit a line between every point:
+\begin{figure}
+\centering
+{
+\includegraphics{assets/slides_91-005}
+}
+\end{figure}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Cross-validation}
+
+
+\begin{itemize}
+\item If we were to draw another observation from the joint distribution of $(Y,X)$, which one do you think would do a better job of prediction? 
+\item ML methods propose a way to check this, by separating data into training and test sets. 
+\item You can fit different models on the training set, and then see which one does the best job of predicting response in the test set.  (This is not a new idea.)
+\item There are some different ways to do this:
+\begin{itemize}
+\item Leave-$k$-out
+\item Leave-one-out
+\item $k$-fold cross validation
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Regularization}
+
+\begin{itemize}
+\item Overfit can become a real problem when we have a lot of predictors ($K$) relative to our number of observations ($N$)
+\item This is a common problem when we think about an industry setting, where for every customer a business might have a large number of measurements.  Which ones should they use to predict an outcome? 
+\item It is also a problem with predicting outcomes when we have a lot of complex covariates.  Which covariates are important? 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Regularization}
+
+\begin{itemize}
+\item Consider a model:
+$$
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_K X_K + \varepsilon
+$$
+\item With $K\ge N$, even if every $\beta_k$ is non-zero, we won't be able to make good predictions with all of our $\hat\beta_k$--and when we care about prediction, that's not our goal, anyhow. 
+\item With regularization, we shrink some of the $\hat \beta_k$ nearly all the way or all the way to zero. 
+\item For \textit{ridge regression} or \textit{lasso}, we select the $\hat\beta_k$ using: 
+$$
+\underset{\Beta}{\textrm{argmin}}\left\{\sum_{i = 1}^N \left(Y_i - \beta_0 + \sum_{k = 1}^K X_{ki}\beta_k\right)^2 + \lambda \sum_{k = 1}^K |\beta_k|^q 
+\right\}
+$$
+\end{itemize}
+\scriptsize
+\cite{hastie2009elements}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Regularization}
+
+\begin{itemize}
+\item For our model of $\tau(x)$, this means we fit something like a Lin estimator, to predict outcomes under treatment and under control, and determine which covariates are useful to include in our model. 
+\item \cite{bloniarz2016lasso} suggest a procedure to do this for treatment effect estimation with the lasso. 
+\item You could consider different penalties for different levels of interactions.  
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+
+\begin{frame}{Regression Trees}
+
+\begin{itemize}
+\item Suppose we have joint data, $(Y,X)$, with just one predictor, $X$.
+\item Our goal is to pick some value of $c$ so that we can split the data into two sub-samples \dots
+\begin{itemize}
+\item $X_i \le c$
+\item $X_i >c$
+\end{itemize}
+\item\dots and for each sub-sample, predict $\hat Y $ as the mean of the $Y_i$ within each sample.
+\item We want to pick $c$ to minimize:
+$$
+Q = \sum_{i:X_i \le c}(Y_i - \bar Y_{\text{lower}})^2 + \sum_{i:X_i > c}(Y_i - \bar Y_{\text{upper}})^2
+$$
+\end{itemize}
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]
+
+\begin{figure}
+\centering
+{
+\includegraphics{assets/slides_91-006}
+}
+\end{figure}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]
+
+\begin{figure}
+\centering
+{
+\includegraphics{assets/slides_91-007}
+}
+\end{figure}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Regression Trees}
+
+\begin{itemize}
+\item Now suppose we have joint data, $(Y,X_1, \dots, X_k)$.
+\item We will do the same approach to finding thresholds to minimize prediction error, but we'll want to pick which $X_k$ we use for threshholding, as well. 
+\item Generally, we'll define the depth of the tree as 2 or three variables; first we'll split on $X_k$, then we'll split on $X_j$\dots
+\end{itemize}
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Regression Trees}
+
+\begin{itemize}
+\item If we want to find a splitting point with respect to something other than mean response, such as treatment effects, we can target the treatment effect estimator instead of $Y_i$. 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Honesty}
+
+\begin{itemize}
+\item Returning to (causal) inference\dots  we might like to use these methods to get valid inference, potentially on causal targets.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{An honest tree algorithm}
+
+\begin{enumerate}
+\item Split the sample into two folds. 
+\item Use the first fold to learn splits of the tree. 
+\item Estimate response within leaves using the second fold. 
+\end{enumerate}
+
+\begin{itemize}
+\item This can result in some leaves being empty.  Prune them? 
+\item This procedure reduces bias relative to those proposed by \cite{breiman2001random}.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{An honest tree algorithm}
+
+\begin{Schunk}
+\begin{Sinput}
+> library(grf)
+> set.seed(60637)
+> n <- 500
+> p <- 10
+> X <- matrix(rnorm(n * p), n, p)
+> W <- rbinom(n, 1, 0.5)
+> Y <- pmax(X[, 1], 0) * W + X[, 2] +
++   pmin(X[, 3], 0) + rnorm(n)
+> c.forest <- causal_forest(X, Y, W)
+\end{Sinput}
+\end{Schunk}
+
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{An honest tree}
+
+\begin{figure}
+\centering
+\includegraphics[trim=10bp 170bp 10bp 180bp,clip,width=0.92\textwidth,height=0.75\textheight,keepaspectratio]{assets/tree-plot.png}
+\end{figure}
+\hfill
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+%-------------------------------------------------------------------------------%
+\begin{frame}{Forests}
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.7\textwidth]{assets/weight-trees.png}
+\end{figure}
+\vskip -0.2cm
+\hfill \tiny \cite{athey2019machine}
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+%-------------------------------------------------------------------------------%
+\begin{frame}{Policy learning}
+
+\begin{itemize}
+\item Given information about an individual (age, location, education, etc.) which among multiple treatments should they be assigned? 
+\item How do you learn a \textit{policy} that will help you determine how to allocate treatment?  \dots potentially accounting for different costs of treatment. 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Matrix completion: the Nexflix problem}
+
+\begin{itemize}
+\item Netflix has data on viewers, their characteristics, and how they rate movies. 
+\item The question: how to best recommend to them movies that they have not yet rated?
+\item The challenge: come up with the best recommendation algorithm, winner gets \$1 million. 
+\item This can be framed as a matrix completion problem: put users on rows, movies on columns, predict all of the missing rankings.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Causal inference: no free lunch}
+
+
+\begin{itemize}
+\item Machine learning does not solve the fundamental problem of causal inference. 
+\item Causal interpretations are based on assumptions about the data generating process, or knowledge of assignment procedures. These are outside the realm of machine learning methods. 
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Prediction error}
+
+\begin{itemize}
+\item ML methods may do a good job of producing estimates, but how do we account for inference?
+\item Cross-validation 
+\item Bootstrapping
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+\\~\
+}
+
+%-------------------------------------------------------------------------------%
+
+%-------------------------------------------------------------------------------%
+\backupbegin
+%-------------------------------------------------------------------------------%
+\begin{frame}[allowframebreaks]{References}
+    \bibliographystyle{apalike}
+    \bibliography{assets/bib}
+\end{frame}
+%-------------------------------------------------------------------------------%
+
+\backupend
+\end{document}
