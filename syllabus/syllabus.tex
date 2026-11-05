@@ -3,80 +3,52 @@
 % Original text and DOCX snapshots are in sources/.
 % Bibliographic years and article titles are intentionally unchanged.
 % Class numbering follows the source, including Class 3.2 (no Class 3.1).
-\documentclass[11pt,letterpaper]{article}
+\documentclass[letterpaper,12pt,parskip=full,DIV=10]{scrartcl}
+\title{PLSC 48110/28110: Lab and Field Experiments in Comparative Politics and Policy.}
+\subtitle{University of Chicago.}
+\author{}
+\date{}
+
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage[margin=0.8in,headheight=14pt,headsep=15pt,footskip=24pt]{geometry}
+\usepackage{mathptmx}
 \usepackage{microtype}
-\usepackage{xcolor}
 \usepackage{enumitem}
-\usepackage{titlesec}
 \usepackage{needspace}
-\usepackage{tabularx}
-\usepackage{fancyhdr}
+\usepackage{scrlayer-scrpage}
 \usepackage{xurl}
 \usepackage{hyperref}
-\definecolor{maroon}{HTML}{800000}
-\definecolor{linkblue}{HTML}{174E79}
-\hypersetup{colorlinks=true,urlcolor=linkblue,linkcolor=maroon,
+\hypersetup{colorlinks=true,citecolor=black,
   pdftitle={Lab and Field Experiments in Comparative Politics and Policy},
   pdfauthor={Molly Offer-Westort},pdfsubject={PLSC 48110/28110 syllabus}}
 \urlstyle{same}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
 \setlength{\emergencystretch}{2em}
 \raggedbottom
 \clubpenalty=10000
 \widowpenalty=10000
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small\textcolor{maroon}{PLSC 48110/28110}}
-\fancyhead[R]{\small Lab and Field Experiments}
-\fancyfoot[R]{\small\thepage}
-\renewcommand{\headrulewidth}{0.3pt}
-\titleformat{\section}{\large\bfseries\color{maroon}}{}{0pt}{}
-\titlespacing*{\section}{0pt}{16pt}{6pt}
-\titleformat{\subsection}{\normalsize\bfseries}{}{0pt}{}
-\titlespacing*{\subsection}{0pt}{11pt}{4pt}
-\setlist[itemize]{leftmargin=1.25em,itemsep=5pt,topsep=3pt,parsep=0pt}
-\setlist[itemize,2]{leftmargin=1.4em,itemsep=3pt}
-\setlist[itemize,3]{leftmargin=1.4em,itemsep=2pt}
-\newcommand{\courseweek}[2]{\Needspace{9\baselineskip}\section*{Week #1: #2}}
-\newcommand{\class}[2]{\Needspace{6\baselineskip}\subsection*{Class #1}\nopagebreak #2\par\nopagebreak\textbf{Readings}\nopagebreak}
-\newcommand{\blankfield}{\rule{1.75in}{0.3pt}}
-\newcommand{\showfield}[1]{\if\relax\detokenize{#1}\relax\blankfield\else#1\fi}
-% Fill in these four fields for a particular offering. Empty values render as blank lines.
-\newcommand{\CourseMeetingTime}{}
-\newcommand{\CourseLocation}{}
-\newcommand{\InstructorOfficeHours}{}
-\newcommand{\InstructorOfficeLocation}{}
+\clearpairofpagestyles
+\ofoot*{\pagemark}
+\pagestyle{scrheadings}
+\setlist[itemize]{noitemsep,topsep=0pt}
+\newcommand{\courseweek}[2]{\Needspace{12\baselineskip}\subsection*{Week #1: #2}}
+\newcommand{\class}[2]{\Needspace{9\baselineskip}\subsubsection*{Class #1}\nopagebreak #2\par\nopagebreak\textbf{Readings}\par\nopagebreak}
 % The booking link is retained from the source; update it as needed.
 \newcommand{\OfficeHoursBookingURL}{https://calendly.com/mollyow/office-hours}
 
 \begin{document}
-\thispagestyle{plain}
-{\small\bfseries\color{maroon} UNIVERSITY OF CHICAGO\par}
-\vspace{4pt}
-{\LARGE\bfseries Lab and Field Experiments in\\[2pt]Comparative Politics and Policy\par}
-\vspace{4pt}
-{\large PLSC 48110/28110\par}
-\vspace{5pt}
-\textbf{Instructor:} Dr. Molly Offer-Westort, \href{mailto:mollyow@uchicago.edu}{mollyow@uchicago.edu}
+\maketitle
+\vskip -10 ex
 
-\begin{tabularx}{\linewidth}{@{}lXlX@{}}
-\textbf{Meetings:} & \expandafter\showfield\expandafter{\CourseMeetingTime} & \textbf{Location:} & \expandafter\showfield\expandafter{\CourseLocation}\\[5pt]
-\textbf{Office hours:} & \expandafter\showfield\expandafter{\InstructorOfficeHours} & \textbf{Office:} & \expandafter\showfield\expandafter{\InstructorOfficeLocation}
-\end{tabularx}
+\textbf{Instructor:} Molly Offer-Westort; \href{mailto:mollyow@uchicago.edu}{mollyow@uchicago.edu}\\
+\textbf{Office hours:} Book at \expandafter\url\expandafter{\OfficeHoursBookingURL}\\
+\textbf{Office:} Pick Hall 328
 
-\textbf{Office-hours booking:} \href{\OfficeHoursBookingURL}{Book an appointment}
-
-\section*{Course description and objectives}
+\paragraph{Course description and objectives.}
 
 
 Over the last several decades in what has become known as an ``experimental revolution,'' social scientists have increasingly used experimental designs to study the effects of interventions and policies. The growing popularity of experimental methodology gives researchers leverage on causal questions, and bringing these designs to the field helps researchers and policy makers to take their research designs closer to the real social phenomena they seek to understand. In this course, we will study how these methods have been used to study politics and policy, with examples from Africa, Latin America, and India. We will ask what types of questions experiments can answer, and what types of things we can manipulate and measure. We will review design considerations, such as methods to account for treatment spillover, and randomization procedures. We will also read critiques of experimental methods and field experiments; students will discuss ethical considerations, and will consider tradeoffs to limitations of experimental designs in field settings. While we will carry out some calculations, this course will not be oriented towards statistical programming; however, undergraduate class participants should have taken PLSC 26969 or obtain instructor consent.
 
-\section*{Assignments}
+\paragraph{Assignments.}
 
 Each student will be responsible for co-leading discussion on two of the second meetings of the week, beginning the third week of the course. For these meetings, discussion leaders will jointly provide a 20-30 minute total high-level overview of the papers assigned, and will develop a list of discussion questions based on the course's running substantive and methodological themes. Co-discussion leaders may divide papers among themselves or may collaborate; presentation time is combined total across all papers and discussion leaders. Discussion questions should be submitted the evening before class.
 
@@ -94,11 +66,11 @@ The final project will be a pre-analysis plan for a hypothetical lab or field ex
 
 \end{itemize}
 
-\section*{Accommodations}
+\paragraph{Accommodations.}
 
 Please reach out to me directly if you would like to request accommodations for the course to better facilitate your learning. Student Disability Services (\url{https://disabilities.uchicago.edu/}) is also available to provide you resources and support, and may provide approval for specific academic accommodations. If you or your household are affected by the ongoing pandemic in a way that affects your ability to participate in or attend class, please reach out to me as well. Informing me in a timely manner will help me to ensure accommodations are met and I am able to implement an appropriate assessment of your learning.
 
-\section*{Academic honesty}
+\paragraph{Academic honesty.}
 
 All students are expected to be familiar with and follow the University's academic honesty policies (\url{https://studentmanual.uchicago.edu/academic-policies/academic-honesty-plagiarism/}). For this course, you may use generative artificial intelligence tools such as ChatGPT for brainstorming, but you may not directly use any text generated from such tools in any assignments. Note that artificial intelligence may ``hallucinate'' information, so exercise extra caution and verify any information AI provides with reliable sources and proper citation practices
 (see discussions on AI hallucination in: \url{https://www.nytimes.com/2023/03/29/technology/ai-chatbots-hallucinations.html}, \url{https://www.nytimes.com/2023/11/06/technology/chatbots-hallucination-rates.html}).
@@ -125,7 +97,6 @@ All students are expected to be familiar with and follow the University's academ
 
 \end{itemize}
 
-\clearpage
 \courseweek{2}{Introduction to estimation, and survey experiments}
 
 \class{2.1}{Overview of the recent history of field experiments for policy and politics, and some prospective considerations.}
@@ -164,7 +135,6 @@ All students are expected to be familiar with and follow the University's academ
 
 \end{itemize}
 
-\clearpage
 \courseweek{4}{Estimation considerations}
 
 \class{4.1}{Experiments and covariate adjustment.}
@@ -300,7 +270,6 @@ All students are expected to be familiar with and follow the University's academ
 
 \end{itemize}
 
-\clearpage
 \class{8.2}{Applications with IV.}
 
 \begin{itemize}
@@ -343,7 +312,6 @@ All students are expected to be familiar with and follow the University's academ
 
 \Needspace{3\baselineskip}\textbf{Pre-analysis plans due on the last day of class.}
 
-\clearpage
 \section*{Other readings}
 
 \begin{itemize}

@@ -12,9 +12,11 @@ The [Makefile](Makefile) uses `latexmk` and pdfLaTeX, writes auxiliary files in
 
 ## Editing for an offering
 
-Set `CourseMeetingTime`, `CourseLocation`, `InstructorOfficeHours`, and
-`InstructorOfficeLocation` near the top of the TeX source. Their empty defaults
-render blank lines. Update `OfficeHoursBookingURL` as needed.
+The header follows the KOMA-Script title/subtitle and compact instructor block
+used in the other teaching syllabi. It lists Pick Hall 328 and prints the full
+booking URL, controlled by `OfficeHoursBookingURL` near the top of the TeX
+source. Add meeting times and the classroom when they are known; the reusable
+version omits those fields rather than printing blank lines.
 
 The syllabus is undated and retains all nine weeks, class numbering, readings,
 assignment structure, and policies. In particular:
