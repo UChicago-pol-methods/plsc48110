@@ -12,25 +12,11 @@ The [Makefile](Makefile) uses `latexmk` and pdfLaTeX, writes auxiliary files in
 
 ## Editing for an offering
 
-The header follows the KOMA-Script title/subtitle and compact instructor block
-used in the other teaching syllabi. It lists Pick Hall 328 and prints the full
-booking URL, controlled by `OfficeHoursBookingURL` near the top of the TeX
-source. Add meeting times and the classroom when they are known; the reusable
-version omits those fields rather than printing blank lines.
+The header lists Pick Hall 328 and the full booking URL, controlled by
+`OfficeHoursBookingURL` near the top of the TeX source. Add meeting times and
+the classroom when they are known.
 
-The syllabus is undated and retains all nine weeks, class numbering, readings,
-assignment structure, and policies. In particular:
-
-- Class numbering includes Class 3.2, with no Class 3.1.
-- The discussion assignment refers to the second meeting of each week.
-- The proposal is due in Week 6; the pre-analysis plan is due in the final class.
-- Required, optional, and reference readings remain distinct. Wilke et al. is
-  required, outside the optional Worm Wars links.
-- The pandemic provision and AI policy are retained.
-
-Reference snapshots are included as [text](sources/original-syllabus.txt) and
-[Word](sources/original-syllabus.docx). These snapshots retain the offering's
-original dates and logistics.
+The syllabus is undated and covers nine weeks.
 
 ## Reading bibliography
 

@@ -1,3 +1,5 @@
+% !Rnw weave = knitr
+% Edit 02-introduction-to-estimation.Rnw; the corresponding .tex is generated.
 \documentclass[xcolor={dvipsnames},handout]{beamer}
 
 \usepackage{assets/pres-template_MOW}
@@ -19,6 +21,8 @@
 \usepackage{assets/Sweave}
 \hypersetup{pdftitle={PLSC 48110/28110 - Lecture 2: Introduction to estimation},pdfauthor={Molly Offer-Westort},pdfpagemode=UseNone}
 \begin{document}
+
+
 
 %-------------------------------------------------------------------------------%
 \frame{\titlepage
@@ -78,10 +82,10 @@
 \begin{frame}{Joint relationships}
 
 \begin{itemize}
-\item Correlation: $X$ and $Y$ are correlated. E.g., $\uparrow$ age and $\uparrow$ income. 
-\item Causation: $X$ \textit{moves} $Y$. E.g., when I fertilize the plants, I get a higher yield. 
+\item Correlation: $X$ and $Y$ are correlated. E.g., $\uparrow$ age and $\uparrow$ income.
+\item Causation: $X$ \textit{moves} $Y$. E.g., when I fertilize the plants, I get a higher yield.
 \begin{itemize}
-\item Implies a \textit{counterfactual}. . If I \textit{hadn't} moved $X$, we would see a different outcome for $Y$. 
+\item Implies a \textit{counterfactual}. . If I \textit{hadn't} moved $X$, we would see a different outcome for $Y$.
 \item Recall \cite{holland1986statistics}: ``No causation without manipulation.''
 \end{itemize}
 \end{itemize}
@@ -103,8 +107,8 @@
 \begin{frame}{Joint relationships: notation}
 
 \begin{itemize}
-\item Dependent variable: ($Y$), the thing we want to study variation in; also ``outcome'', ``response''. 
-\item Independent variable: ($W$) (or $D$) in causal settings, the thing that we manipulate. Also ``treatment.'' In non-causal settings, something that may have some natural variation in the population associated with the dependent variable (often $X$). 
+\item Dependent variable: ($Y$), the thing we want to study variation in; also ``outcome'', ``response''.
+\item Independent variable: ($W$) (or $D$) in causal settings, the thing that we manipulate. Also ``treatment.'' In non-causal settings, something that may have some natural variation in the population associated with the dependent variable (often $X$).
 \end{itemize}
 
 
@@ -124,7 +128,7 @@
 %-------------------------------------------------------------------------------%
 \begin{frame}{Potential outcomes: notation}
 
-Assume $W$ is binary. 
+Assume $W$ is binary.
 $$
 Y_i = \begin{cases}
 Y_i(0) & W_i = 0 \\
@@ -133,7 +137,7 @@ Y_i(1) & W_i = 1 \\
 $$
 
 
-Why is $\E[Y_i(0)]$ different from $\E[Y_i|W = 0]$? 
+Why is $\E[Y_i(0)]$ different from $\E[Y_i|W = 0]$?
 
 (What is the expectation \textit{over}?)
 
@@ -183,7 +187,7 @@ Why is $\E[Y_i(0)]$ different from $\E[Y_i|W = 0]$?
 \centering
 \textcolor{Maroon}{Chattopadhyay, Raghabendra \& Duflo, Esther (2004). Women as policy makers: Evidence from a randomized policy experiment in India.}
 \\~\
-as discussed in 
+as discussed in
 \\~\
 \textcolor{Maroon}{Gerber, Alan S. \& Green, Donald P. (2012). Field experiments: Design, analysis, and interpretation.}
 \nocite{chattopadhyay2004women, gerber2012field, butler2011politicians}
@@ -207,7 +211,7 @@ as discussed in
 
 \begin{itemize}
 \item Population: 7 villages
-\item Treatment: $W = 1$ if female-headed council, $W = 0$ if male 
+\item Treatment: $W = 1$ if female-headed council, $W = 0$ if male
 \item Outcome: Budget allocation to sanitation
 \end{itemize}
 
@@ -247,16 +251,16 @@ $$
 
 $$
 \tau_i = Y_i(1)-Y_i(0)
-$$ 
+$$
 
-We're interested in the treatment effect, the difference in potential outcomes had we applied treatment $W$, vs. if we had not. 
+We're interested in the treatment effect, the difference in potential outcomes had we applied treatment $W$, vs. if we had not.
 
 \begin{itemize}
 \item What we can't see: $\tau_i$
-\item Fundamental problem of causal inference: we can't see \textit{both} potential outcomes for a given unit \textit{at the same time}. 
-\item  \cite{holland1986statistics}'s assumptions: some structure we can impose on the data to back out counterfactuals. (We usually don't know if assumptions are true.) 
-\item Experiments use the independence assumption\dots this one we have some more control over. 
-\end{itemize} 
+\item Fundamental problem of causal inference: we can't see \textit{both} potential outcomes for a given unit \textit{at the same time}.
+\item  \cite{holland1986statistics}'s assumptions: some structure we can impose on the data to back out counterfactuals. (We usually don't know if assumptions are true.)
+\item Experiments use the independence assumption\dots this one we have some more control over.
+\end{itemize}
 
 \end{frame}
 
@@ -289,7 +293,7 @@ Village 7 & \textcolor{red}{?} & 30 & 1 & 30 & \textcolor{red}{?}
 \end{tabular}
 \end{table}
 
-We can't directly get $\tau_i$ for any individual, and so we also can't take the adverage for $\tau_i$ across individuals. 
+We can't directly get $\tau_i$ for any individual, and so we also can't take the average for $\tau_i$ across individuals.
 
 
 \end{frame}
@@ -324,8 +328,8 @@ For example, when we care about causal effects, the estimand may be:
 
 
 Why might these three quantities differ?
-% 
-% 
+%
+%
 
 
 % \textit{Notational aside: we often denote the estimand with the greek letter $\theta$. Specific estimands may have conventional notations, such as $\tau$ for the ATE, $\mu$ for the mean, or $\sigma$ for the standard deviation.}
@@ -348,7 +352,7 @@ Why might these three quantities differ?
 \begin{frame}{Estimator}
 
 An \textit{estimator} is a function of the data we observe; it is a statistic that gives us an informed guess about the value of the estimand. \\~\
- 
+
 Below, the estimator is the function $g(\cdot)$. \\~\
 
 $$
@@ -373,7 +377,7 @@ We can also think of it as a recipe. Given some data, $X_1, \dots, X_n$, follow 
 %-------------------------------------------------------------------------------%
 \begin{frame}{Estimate}
 
-An \textit{estimate} is what we calculate from our estimator with a specific set of data. Below, the estimate is the quantity $\hat{\theta}_n$. 
+An \textit{estimate} is what we calculate from our estimator with a specific set of data. Below, the estimate is the quantity $\hat{\theta}_n$.
 
 $$
 \hat{\theta}_n = g(X_1, \dots, X_n)
@@ -421,10 +425,10 @@ $$
 \begin{frame}{Independence}
 
 \begin{itemize}
-\item Units that receive treatment look, on average, like units that do not. 
+\item Units that receive treatment look, on average, like units that do not.
 \item In experiments, we assign treatment \textit{randomly}, so we know that there is no inherent difference between subjects that \textit{could have} received treatment and \textit{could have} received control--all subjects \textit{could have} received all versions of treatment, hypothetically. (The subjunctive mood of research design \dots)
-\item Why is this so special? 
-\item What this give us: $\E[Y_i | W_i = 1] = \E[Y_i(1)]$ 
+\item Why is this so special?
+\item What this give us: $\E[Y_i | W_i = 1] = \E[Y_i(1)]$
 \item We can back out an estimate of the average treatment effect:
 $$
 \tau = \E[Y_i(1)-Y_i(0)]
@@ -516,9 +520,9 @@ $$
 \begin{frame}{Chattopadhyay \& Duflo example}
 
 \begin{itemize}
-\item We have produced an estimate here, by taking the difference in means.  
+\item We have produced an estimate here, by taking the difference in means.
 \item But what can we say about our uncertainty about this estimate? The number of observations in each group is pretty small.
-\item Is the estimate meaningfully different from zero? 
+\item Is the estimate meaningfully different from zero?
 \item How likely would we be to see an effect this size just by chance?
 \end{itemize}
 
@@ -540,7 +544,7 @@ $$
 
 \begin{itemize}
 \item Inference is about uncertainty.  What is the source of uncertainty here?
-\item Aside on finite populations vs. random sample from superpopulation. 
+\item Aside on finite populations vs. random sample from superpopulation.
 \end{itemize}
 
 \end{frame}
@@ -579,28 +583,28 @@ $$
 
 %-------------------------------------------------------------------------------%
 % \begin{frame}{Sharp null hypothesis of no effect}
-% 
+%
 % Assuming all treatment effects are exactly zero is called the \textbf{sharp null hypothesis of no effect.}  Also referred to as ``Fisher's null'' after Sir Ronald Aylmer Fisher (1890-1962).
-% 
+%
 % \begin{figure}
 % \centering
 % \includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{assets/youngronaldfisher.jpeg}
 % \end{figure}
-% 
-% 
+%
+%
 % \end{frame}
-% 
-% 
+%
+%
 % %%%%%NOTE%%%%%
 % \note{
 % \scriptsize \singlespacing
-% 
+%
 % \begin{itemize}
 % \item xxxx
 % \end{itemize}
-% 
+%
 % }
-% 
+%
 % %-------------------------------------------------------------------------------%
 \begin{frame}{Sharp null hypothesis of no effect}
 
@@ -631,7 +635,7 @@ $$
 
 \begin{itemize}
 \item To test this hypothesis, we also need to know (or assume we know) the randomization procedure
-\item Here, we'll assume exactly two villages are assigned treatment. 
+\item Here, we'll assume exactly two villages are assigned treatment.
 \end{itemize}
 
 \end{frame}
@@ -709,7 +713,7 @@ Village 7 & \textcolor{red}{30} & 30 & 1 & 30 & \textcolor{red}{0}
 
 %-------------------------------------------------------------------------------%
 \begin{frame}{Gerber Green example}
-We can re-run the randomization, and the potential outcomes and observed $Y_i$ will not change, but the treatment effect estimate will. 
+We can re-run the randomization, and the potential outcomes and observed $Y_i$ will not change, but the treatment effect estimate will.
 
 \begin{table}[]
 \begin{tabular}{lccccc}
@@ -747,7 +751,7 @@ $$
 
 %-------------------------------------------------------------------------------%
 \begin{frame}{Gerber Green example}
-We can re-run the randomization, and the potential outcomes and observed $Y_i$ will not change, but the treatment effect estimate will. 
+We can re-run the randomization, and the potential outcomes and observed $Y_i$ will not change, but the treatment effect estimate will.
 
 \begin{table}[]
 \begin{tabular}{lccccc}
@@ -785,7 +789,7 @@ $$
 
 %-------------------------------------------------------------------------------%
 \begin{frame}{Gerber Green example}
-We can re-run the randomization, and the potential outcomes and observed $Y_i$ will not change, but the treatment effect estimate will. 
+We can re-run the randomization, and the potential outcomes and observed $Y_i$ will not change, but the treatment effect estimate will.
 
 \begin{table}[]
 \begin{tabular}{lccccc}
@@ -924,7 +928,7 @@ And our difference in means estimate of the average treatment effect under the r
 %-------------------------------------------------------------------------------%
 \begin{frame}[fragile]
 \renewcommand{\Sweavesize}{\scriptsize}
-Adding in the hypothetical data. 
+Adding in the hypothetical data.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -970,15 +974,17 @@ Consider all the ways treatment could be assigned. This is what \texttt{ri} is d
 \begin{Sinput}
 > (perms <- genperms(df$W))
 \end{Sinput}
+\end{Schunk}
+\begin{Schunk}
 \begin{Soutput}
-     [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]
- 1      1     1     1     1     1     1     0
- 2      1     0     0     0     0     0     1
- 3      0     1     0     0     0     0     1
- 4      0     0     1     0     0     0     0
- 5      0     0     0     1     0     0     0
- 6      0     0     0     0     1     0     0
- 7      0     0     0     0     0     1     0
+  [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+1    1    1    1    1    1    1    0
+2    1    0    0    0    0    0    1
+3    0    1    0    0    0    0    1
+4    0    0    1    0    0    0    0
+5    0    0    0    1    0    0    0
+6    0    0    0    0    1    0    0
+7    0    0    0    0    0    1    0
 \end{Soutput}
 \end{Schunk}
 \end{frame}
@@ -986,14 +992,14 @@ Consider all the ways treatment could be assigned. This is what \texttt{ri} is d
 \begin{frame}[fragile]{All possible treatment assignments (continued)}
 \begin{Schunk}
 \begin{Soutput}
-     [,8]  [,9] [,10] [,11] [,12] [,13] [,14]
- 1      0     0     0     0     0     0     0
- 2      1     1     1     1     0     0     0
- 3      0     0     0     0     1     1     1
- 4      1     0     0     0     1     0     0
- 5      0     1     0     0     0     1     0
- 6      0     0     1     0     0     0     1
- 7      0     0     0     1     0     0     0
+  [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+1    0    0     0     0     0     0     0
+2    1    1     1     1     0     0     0
+3    0    0     0     0     1     1     1
+4    1    0     0     0     1     0     0
+5    0    1     0     0     0     1     0
+6    0    0     1     0     0     0     1
+7    0    0     0     1     0     0     0
 \end{Soutput}
 \end{Schunk}
 \end{frame}
@@ -1001,14 +1007,14 @@ Consider all the ways treatment could be assigned. This is what \texttt{ri} is d
 \begin{frame}[fragile]{All possible treatment assignments (continued)}
 \begin{Schunk}
 \begin{Soutput}
-    [,15] [,16] [,17] [,18] [,19] [,20] [,21]
- 1      0     0     0     0     0     0     0
- 2      0     0     0     0     0     0     0
- 3      1     0     0     0     0     0     0
- 4      0     1     1     1     0     0     0
- 5      0     1     0     0     1     1     0
- 6      0     0     1     0     1     0     1
- 7      1     0     0     1     0     1     1
+  [,15] [,16] [,17] [,18] [,19] [,20] [,21]
+1     0     0     0     0     0     0     0
+2     0     0     0     0     0     0     0
+3     1     0     0     0     0     0     0
+4     0     1     1     1     0     0     0
+5     0     1     0     0     1     1     0
+6     0     0     1     0     1     0     1
+7     1     0     0     1     0     1     1
 \end{Soutput}
 \end{Schunk}
 \end{frame}
@@ -1036,14 +1042,13 @@ Then generate the sampling distribution of the ATE estimate under the sharp null
 +         Y1 = df$Y1
 + )
 > dm <- gendist(Ys_null,
-+               perms, 
++               perms,
 +               prob=df$probs)
 > dm
 \end{Sinput}
 \begin{Soutput}
- [1] -4.0 -0.5 -0.5 -7.5 -4.0  6.5 -0.5
- [8] -0.5 -7.5 -4.0  6.5  3.0 -4.0 -0.5
-[15] 10.0 -4.0 -0.5 10.0 -7.5  3.0  6.5
+ [1] -4.0 -0.5 -0.5 -7.5 -4.0  6.5 -0.5 -0.5 -7.5 -4.0  6.5  3.0 -4.0
+[14] -0.5 10.0 -4.0 -0.5 10.0 -7.5  3.0  6.5
 \end{Soutput}
 \end{Schunk}
 
@@ -1061,34 +1066,36 @@ Then generate the sampling distribution of the ATE estimate under the sharp null
 }
 
 %-------------------------------------------------------------------------------%
-% 
+%
 % \begin{frame}[fragile]
 \renewcommand{\Sweavesize}{\scriptsize}
-% 
+%
 % The mean under our null distribution is \textit{exactly} zero. Why?
-% 
+%
 % <<>>=
 % mean(dm)
 % @
-% 
-% 
+%
+%
 % \end{frame}
-% 
-% 
+%
+%
 % %%%%%NOTE%%%%%
 % \note{
 % \scriptsize \singlespacing
-% 
+%
 % \begin{itemize}
 % \item xxxx
 % \end{itemize}
 % \\~\
 % }
-% 
+%
 % %-------------------------------------------------------------------------------%
 \begin{frame}{Sampling distribution under the sharp null}
 \centering
-\includegraphics[width=0.75\textwidth,height=0.78\textheight,keepaspectratio]{assets/slides_22-007}
+\begin{Schunk}
+
+\includegraphics[width=0.75\textwidth,height=0.78\textheight,keepaspectratio]{assets/generated/02-introduction-to-estimation-randomization-plot-1-1} \end{Schunk}
 \end{frame}
 
 \begin{frame}[fragile]{Probabilities under the sharp null}
@@ -1099,11 +1106,11 @@ Then generate the sampling distribution of the ATE estimate under the sharp null
 \end{Sinput}
 \begin{Soutput}
 dm
-     -7.5        -4      -0.5         3       6.5        10 
-0.1428571 0.2380952 0.2857143 0.0952381 0.1428571 0.0952381 
+     -7.5        -4      -0.5         3       6.5        10
+0.1428571 0.2380952 0.2857143 0.0952381 0.1428571 0.0952381
 \end{Soutput}
 \begin{Sinput}
-> (pval <- mean(abs(dm) >= dm_hat))
+> (pval <- mean(abs(dm) >= abs(dm_hat)))
 \end{Sinput}
 \begin{Soutput}
 [1] 0.3809524
@@ -1125,7 +1132,9 @@ dm
 %-------------------------------------------------------------------------------%
 \begin{frame}{Two-sided p-value}
 \centering
-\includegraphics[width=0.75\textwidth,height=0.78\textheight,keepaspectratio]{assets/slides_22-009}
+\begin{Schunk}
+
+\includegraphics[width=0.75\textwidth,height=0.78\textheight,keepaspectratio]{assets/generated/02-introduction-to-estimation-randomization-plot-2-1} \end{Schunk}
 \end{frame}
 
 \begin{frame}[fragile]{Calculating the p-value}
@@ -1136,11 +1145,11 @@ dm
 \end{Sinput}
 \begin{Soutput}
 dm
-     -7.5        -4      -0.5         3       6.5        10 
-0.1428571 0.2380952 0.2857143 0.0952381 0.1428571 0.0952381 
+     -7.5        -4      -0.5         3       6.5        10
+0.1428571 0.2380952 0.2857143 0.0952381 0.1428571 0.0952381
 \end{Soutput}
 \begin{Sinput}
-> (pval <- mean(abs(dm) >= dm_hat))
+> (pval <- mean(abs(dm) >= abs(dm_hat)))
 \end{Sinput}
 \begin{Soutput}
 [1] 0.3809524
@@ -1165,7 +1174,7 @@ dm
 
 \begin{itemize}
 \item Under the null distribution, if we were to re-randomize the experiment many times, we would see a value \textit{at least as extreme as our estimate} 38.1\% of the time.
-\item That doesn't seem \textbf{that} unlikely--more than one in three times, we would see an estimate as large as we got, just by chance. 
+\item That doesn't seem \textbf{that} unlikely--more than one in three times, we would see an estimate as large as we got, just by chance.
 \end{itemize}
 
 \end{frame}
@@ -1184,33 +1193,33 @@ dm
 %-------------------------------------------------------------------------------%
 % \begin{frame}[fragile]
 \renewcommand{\Sweavesize}{\scriptsize}
-% 
+%
 % \texttt{ri} produces the same exact p-value.
-% 
-% 
+%
+%
 % <<>>=
-% dispdist(distout = dm, 
-%          ate = dm_hat, 
+% dispdist(distout = dm,
+%          ate = dm_hat,
 %          display.plot = FALSE)$two.tailed.p.value.abs
 % @
-% 
-% 
-% That's because it is doing the exact same thing under the hood. 
-% 
-% 
+%
+%
+% That's because it is doing the exact same thing under the hood.
+%
+%
 % \end{frame}
-% 
-% 
+%
+%
 % %%%%%NOTE%%%%%
 % \note{
 % \scriptsize \singlespacing
-% 
+%
 % \begin{itemize}
 % \item xxxx
 % \end{itemize}
 % \\~\
 % }
-% 
+%
 % %-------------------------------------------------------------------------------%
 \begin{frame}
 
@@ -1235,83 +1244,83 @@ dm
 
 %-------------------------------------------------------------------------------%
 % \begin{frame}{Hypotheses}
-% 
+%
 % \begin{itemize}
 % \item We framed our null hypothesis as below:
-% 
+%
 % $$
 % H_0: \tau_i = 0, \text{ for all } i \text{ in our pop.}
 % $$
-% 
-% 
-% \item Implicitly, the alternative is that for some individual(s), the treatment effect is non-zero. 
-% 
+%
+%
+% \item Implicitly, the alternative is that for some individual(s), the treatment effect is non-zero.
+%
 % $$
 % H_A: \tau_i \neq 0, \text{ for some } i \text{ in our pop.}
 % $$
-% 
-% 
-% 
+%
+%
+%
 % \item In our case, we did not find strong evidence to reject the null hypothesis, i.e., our data is consistent with what we would see if the null hypothesis were true.
-% 
-% 
-% 
+%
+%
+%
 % \item Note that we do NOT say that we reject or accept the alternative hypothesis.
-% 
-% 
-% 
-% \item We can only say that our results were not consistent with or were consistent with what we would have seen under the null--i.e., we have evidence to reject or fail to reject the null. 
+%
+%
+%
+% \item We can only say that our results were not consistent with or were consistent with what we would have seen under the null--i.e., we have evidence to reject or fail to reject the null.
 % \end{itemize}
-% 
-% 
+%
+%
 % \end{frame}
-% 
-% 
+%
+%
 % %%%%%NOTE%%%%%
 % \note{
 % \scriptsize \singlespacing
-% 
+%
 % \begin{itemize}
 % \item xxxx
 % \end{itemize}
 % \\~\
 % }
-% 
+%
 % %-------------------------------------------------------------------------------%
 % \begin{frame}{Distributions of estimators}
-% 
+%
 % \begin{itemize}
-% \item Our difference in means estimator is a function of the data we observe. 
+% \item Our difference in means estimator is a function of the data we observe.
 % \item Because there is randomness in the data, here, due to random assignment of treatment, the estimator is also a random variable.
 % \item Just like other random variables have distributions to describe them, estimators also have distributions.
 % \item We don't know the \textit{true} distribution of the difference in means estimator, for the same reason that we don't know individual treatment effects.\textcolor{red}{(FPoCI!)}
-% \item But we DO know what the distribution would be under the null. 
+% \item But we DO know what the distribution would be under the null.
 % \end{itemize}
-% 
+%
 % \end{frame}
-% 
-% 
+%
+%
 % %%%%%NOTE%%%%%
 % \note{
 % \scriptsize \singlespacing
-% 
+%
 % \begin{itemize}
 % \item xxxx
 % \end{itemize}
 % \\~\
 % }
-% 
+%
 % %-------------------------------------------------------------------------------%
 \begin{frame}
 
-Note that we are conducting inference with respect to: 
+Note that we are conducting inference with respect to:
 
 \begin{itemize}
-\item a defined population 
-\item a defined treatment 
-\item a defined outcome 
-\item a known treatment assignment mechanism 
-\item a specified estimand 
+\item a defined population
+\item a defined treatment
+\item a defined outcome
+\item a known treatment assignment mechanism
+\item a specified estimand
 \item a specified estimating procedure
 \end{itemize}
 
@@ -1362,7 +1371,7 @@ Note that we are conducting inference with respect to:
 \item How do we determine what the null is?
 \item We formalize our hypotheses in terms of the effect we are trying to find in the data. Is there a treatment effect? Is there a difference between these two groups?
 \item The null is (often, but not always) the case when there is no effect, or no difference.
-\item We can imagine other kinds of hypotheses, for example that effects are bounded away from zero and positive, or exactly .2. And we can characterize the distribution of our test statistic under the null. 
+\item We can imagine other kinds of hypotheses, for example that effects are bounded away from zero and positive, or exactly .2. And we can characterize the distribution of our test statistic under the null.
 \end{itemize}
 
 \end{frame}
@@ -1382,7 +1391,7 @@ Note that we are conducting inference with respect to:
 \begin{frame}{The null}
 
 \begin{itemize}
-\item Is the sharp null of no individual level effects plausible in this setting? 
+\item Is the sharp null of no individual level effects plausible in this setting?
 \item Does it matter?
 \end{itemize}
 

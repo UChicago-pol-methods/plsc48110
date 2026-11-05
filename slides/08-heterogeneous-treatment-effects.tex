@@ -1,3 +1,5 @@
+% !Rnw weave = knitr
+% Edit 08-heterogeneous-treatment-effects.Rnw; the corresponding .tex is generated.
 \documentclass[xcolor={dvipsnames},handout]{beamer}
 
 \usepackage{assets/pres-template_MOW}
@@ -23,6 +25,8 @@
 \usepackage{assets/Sweave}
 \hypersetup{pdftitle={PLSC 48110/28110 - Lecture 8: Heterogeneous treatment effects and machine learning},pdfauthor={Molly Offer-Westort},pdfpagemode=UseNone}
 \begin{document}
+
+
 
 %-------------------------------------------------------------------------------%
 \frame{\titlepage
@@ -78,13 +82,13 @@
 \begin{itemize}
 \item Beyond questions about the ATE, we may have additional questions when running an experiment
 \begin{itemize}
-\item Are specific subgroups, such as the most vulnerable subjects, affected differently by the intervention? 
+\item Are specific subgroups, such as the most vulnerable subjects, affected differently by the intervention?
 \item Is there a subgroup that is particularly helped by the intervention?
-\item Is there a subgroup that is \textit{harmed} by the intervention? 
+\item Is there a subgroup that is \textit{harmed} by the intervention?
 \item If we have a limited budget, how can we allocate treatment to maximize outcomes?
 \end{itemize}
-\item We may know what subgroups we are interested in ex-ante. 
-\item Or we may want to use data-driven methods to discover the subgroups most affected by our intervention. 
+\item We may know what subgroups we are interested in ex-ante.
+\item Or we may want to use data-driven methods to discover the subgroups most affected by our intervention.
 \end{itemize}
 
 \end{frame}
@@ -104,14 +108,14 @@
 \begin{frame}{When subgroups are pre-determined}
 
 \begin{itemize}
-\item If you already know your subgroups, for example, students who are classified as female vs. otherwise 
+\item If you already know your subgroups, for example, students who are classified as female vs. otherwise
 \item And you just want to test a simple hypothesis of the form
 \begin{align*}
 H_0 & : &  \tau(x) = \tau(x')\\
-H_0 & : &  \tau(x) \neq \tau(x')
+H_1 & : &  \tau(x) \neq \tau(x')
 \end{align*}
 
-\item You can compare simple differences in subgroup treatment effects. 
+\item You can compare simple differences in subgroup treatment effects.
 \begin{align*}
 \left( \E[Y_i(1) - Y_i(0) | X_i = x]\right)- \\
 \left( \E[Y_i(1) - Y_i(0) | X_i = x']\right)
@@ -142,8 +146,8 @@ H_0 & : &  \tau(x) \neq \tau(x')
 \left( \E[Y_i^{obs} | W_i = 1, X_i = x] - \E[Y_i^{obs} | W_i = 0, X_i = x]\right)- \\
 \left( \E[Y_i^{obs} | W_i = 1, X_i = x'] - \E[Y_i^{obs} | W_i = 0, X_i = x']\right)
 \end{align*}
- 
-\item Where for each subgroup, you can estimate as the difference in average outcomes among individuals under treatment vs. control. 
+
+\item Where for each subgroup, you can estimate as the difference in average outcomes among individuals under treatment vs. control.
 \[
 \hat \tau_x  = \bar Y^{obs}_{1, x} - \bar Y^{obs}_{0, x}
 \]
@@ -169,7 +173,7 @@ H_0 & : &  \tau(x) \neq \tau(x')
 
 
 \begin{itemize}
-\item You can also use a linear model; this will return the same estimate  
+\item You can also use a linear model; this will return the same estimate
 \begin{align*}
 \hat Y_i = \hat \beta_0 + \hat \beta_1 W_i + \hat \beta_2 W_i\times (X_i=x) + \hat \beta_3 (X_i=x)
 \end{align*}
@@ -190,19 +194,22 @@ H_0 & : &  \tau(x) \neq \tau(x')
 
 %-------------------------------------------------------------------------------%
 
-\begin{frame}{When subgroups are pre-determined}
-
-
-
+\begin{frame}{A joint test of treatment-effect heterogeneity}
+For $K$ prespecified, mutually exclusive subgroups, fit:
+\[
+Y_i = \alpha + \tau W_i
+  + \sum_{k=1}^{K-1}\delta_k G_{ik}
+  + \sum_{k=1}^{K-1}\gamma_k W_i G_{ik} + \varepsilon_i.
+\]
 \begin{itemize}
-\item If you have many subgroups, you may not want to run tests for all of them separately, as you can run into issues with multiple testing 
-\item There are test corrections for this, but they usually operate under the assumption that your tests are independent  (why might they not be?) 
-\item Instead, you could include them all in the same model
-\begin{align*}
-\hat Y_i = \hat \beta_0 + \hat \beta_1 D_i + \sum_{k = 1}^K \left( \hat \gamma_k \hat W_i\times (X_{ki}=x_{ki}) + \hat\delta_k (X_{ki}=x_{ki})\right)
-\end{align*}
+\item $G_{ik}$ indicates subgroup membership; omit one reference group.
+\item Test the interaction coefficients jointly:
+\[
+H_0:\gamma_1=\cdots=\gamma_{K-1}=0.
+\]
+\item Use a robust Wald/$F$-test of these interactions, with covariance estimation appropriate to the assignment design.
+\item Rejection is evidence that some subgroup treatment effects differ. Identifying which ones requires follow-up comparisons and attention to multiple testing.
 \end{itemize}
-
 \end{frame}
 
 
@@ -220,8 +227,8 @@ H_0 & : &  \tau(x) \neq \tau(x')
 \begin{frame}{When subgroups are not pre-determined}
 
 \begin{itemize}
-\item You might be interested instead in answering the question, "Is there any treatment effect heterogeneity?"  or 
-\item \text{Which} group benefits the most from the program? 
+\item You might be interested instead in answering the question, "Is there any treatment effect heterogeneity?"  or
+\item \text{Which} group benefits the most from the program?
 \end{itemize}
 
 \end{frame}
@@ -241,14 +248,14 @@ H_0 & : &  \tau(x) \neq \tau(x')
 \begin{frame}%{Frametitle}
 
 \begin{itemize}
-\item For a broader range of questions, we might want to be able to model 
+\item For a broader range of questions, we might want to be able to model
 \[
-\tau(x) = \E [Y_i(1) - Y_i(0) | X = x] 
+\tau(x) = \E [Y_i(1) - Y_i(0) | X = x]
 \]
 
-\item If all covariates are discrete and there are few of them, we can fit a fully interacted regression model, as before. 
-\item But when there are a lot of covariates and/or they are continuous, we may want to have a more flexible estimation method. 
-\item Machine learning methods can be helpful to address data-driven problems. 
+\item If all covariates are discrete and there are few of them, we can fit a fully interacted regression model, as before.
+\item But when there are a lot of covariates and/or they are continuous, we may want to have a more flexible estimation method.
+\item Machine learning methods can be helpful to address data-driven problems.
 \end{itemize}
 
 \end{frame}
@@ -303,7 +310,7 @@ How do the objectives of machine learning differ from those of conventional quan
 \end{itemize}
 \item In ML:
 \begin{itemize}
-\item development of algorithms to make classifications or predictions. 
+\item development of algorithms to make classifications or predictions.
 \item e.g., is this a picture of banana or a cat?  Will this person be more likely to click on an ad for sneakers or cookware?
 \end{itemize}
 \item Is there overlap between the two?
@@ -329,7 +336,7 @@ How do the objectives of machine learning differ from those of conventional quan
 \begin{itemize}
 \item In linear regression, propose a model:
 $$ \hat{Y}_i = \hat{\beta}_0 +  \hat{\beta}_1 X_{1i} + \hat{\beta}_2 X_{2i} + \dots + \hat{\beta}_K X_{Ki} $$
-\item Select $\hat \beta_0 \dots \hat\beta_K$ to minimize 
+\item Select $\hat \beta_0 \dots \hat\beta_K$ to minimize
 $$
 \sum_{i = 1}^N \hat{\varepsilon_i}^2 = \sum_{i = 1}^N\left(\hat{Y}_i - Y_i\right)^2
 $$
@@ -353,7 +360,7 @@ $$
 
 
 \begin{itemize}
-\item For prediction tasks, we could use the same model, 
+\item For prediction tasks, we could use the same model,
 $$ \hat{Y}_i = \hat{\beta}_0 +  \hat{\beta}_1 X_{1i} + \hat{\beta}_2 X_{2i} + \dots + \hat{\beta}_K X_{Ki} $$
 \item But select $\hat \beta_0 \dots \hat\beta_K$ to minimize squared prediction error for the next observation:
 $$
@@ -406,7 +413,9 @@ Suppose we would like to fit a model to the following data:
 \begin{figure}
 \centering
 {
-\includegraphics{assets/slides_91-003}
+\begin{Schunk}
+
+\includegraphics[width=0.6\textwidth,height=0.75\textheight,keepaspectratio]{assets/generated/08-heterogeneous-treatment-effects-ml-plot-3-1} \end{Schunk}
 }
 \end{figure}
 
@@ -430,7 +439,9 @@ We could use a single line:
 \begin{figure}
 \centering
 {
-\includegraphics{assets/slides_91-004}
+\begin{Schunk}
+
+\includegraphics[width=0.6\textwidth,height=0.75\textheight,keepaspectratio]{assets/generated/08-heterogeneous-treatment-effects-ml-plot-4-1} \end{Schunk}
 }
 \end{figure}
 
@@ -454,7 +465,9 @@ Or we could fit a line between every point:
 \begin{figure}
 \centering
 {
-\includegraphics{assets/slides_91-005}
+\begin{Schunk}
+
+\includegraphics[width=0.6\textwidth,height=0.75\textheight,keepaspectratio]{assets/generated/08-heterogeneous-treatment-effects-ml-plot-5-1} \end{Schunk}
 }
 \end{figure}
 
@@ -476,8 +489,8 @@ Or we could fit a line between every point:
 
 
 \begin{itemize}
-\item If we were to draw another observation from the joint distribution of $(Y,X)$, which one do you think would do a better job of prediction? 
-\item ML methods propose a way to check this, by separating data into training and test sets. 
+\item If we were to draw another observation from the joint distribution of $(Y,X)$, which one do you think would do a better job of prediction?
+\item ML methods propose a way to check this, by separating data into training and test sets.
 \item You can fit different models on the training set, and then see which one does the best job of predicting response in the test set.  (This is not a new idea.)
 \item There are some different ways to do this:
 \begin{itemize}
@@ -505,8 +518,8 @@ Or we could fit a line between every point:
 
 \begin{itemize}
 \item Overfit can become a real problem when we have a lot of predictors ($K$) relative to our number of observations ($N$)
-\item This is a common problem when we think about an industry setting, where for every customer a business might have a large number of measurements.  Which ones should they use to predict an outcome? 
-\item It is also a problem with predicting outcomes when we have a lot of complex covariates.  Which covariates are important? 
+\item This is a common problem when we think about an industry setting, where for every customer a business might have a large number of measurements.  Which ones should they use to predict an outcome?
+\item It is also a problem with predicting outcomes when we have a lot of complex covariates.  Which covariates are important?
 \end{itemize}
 
 \end{frame}
@@ -530,13 +543,14 @@ Or we could fit a line between every point:
 $$
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_K X_K + \varepsilon
 $$
-\item With $K\ge N$, even if every $\beta_k$ is non-zero, we won't be able to make good predictions with all of our $\hat\beta_k$--and when we care about prediction, that's not our goal, anyhow. 
-\item With regularization, we shrink some of the $\hat \beta_k$ nearly all the way or all the way to zero. 
-\item For \textit{ridge regression} or \textit{lasso}, we select the $\hat\beta_k$ using: 
+\item With $K\ge N$, even if every $\beta_k$ is non-zero, we won't be able to make good predictions with all of our $\hat\beta_k$--and when we care about prediction, that's not our goal, anyhow.
+\item With regularization, we shrink some of the $\hat \beta_k$ nearly all the way or all the way to zero.
+\item For \textit{ridge regression} or \textit{lasso}, we select the $\hat\beta_k$ using:
 $$
-\underset{\Beta}{\textrm{argmin}}\left\{\sum_{i = 1}^N \left(Y_i - \beta_0 + \sum_{k = 1}^K X_{ki}\beta_k\right)^2 + \lambda \sum_{k = 1}^K |\beta_k|^q 
+\underset{\beta_0,\Beta}{\textrm{argmin}}\left\{\sum_{i = 1}^N \left(Y_i - \beta_0 - \sum_{k = 1}^K X_{ki}\beta_k\right)^2 + \lambda \sum_{k = 1}^K |\beta_k|^q
 \right\}
 $$
+Here $q=1$ gives the lasso and $q=2$ gives ridge regression.
 \end{itemize}
 \scriptsize
 \cite{hastie2009elements}
@@ -558,9 +572,9 @@ $$
 \begin{frame}{Regularization}
 
 \begin{itemize}
-\item For our model of $\tau(x)$, this means we fit something like a Lin estimator, to predict outcomes under treatment and under control, and determine which covariates are useful to include in our model. 
-\item \cite{bloniarz2016lasso} suggest a procedure to do this for treatment effect estimation with the lasso. 
-\item You could consider different penalties for different levels of interactions.  
+\item For our model of $\tau(x)$, this means we fit something like a Lin estimator, to predict outcomes under treatment and under control, and determine which covariates are useful to include in our model.
+\item \cite{bloniarz2016lasso} suggest a procedure to do this for treatment effect estimation with the lasso.
+\item You could consider different penalties for different levels of interactions.
 \end{itemize}
 
 \end{frame}
@@ -614,7 +628,9 @@ $$
 \begin{figure}
 \centering
 {
-\includegraphics{assets/slides_91-006}
+\begin{Schunk}
+
+\includegraphics[width=0.6\textwidth,height=0.75\textheight,keepaspectratio]{assets/generated/08-heterogeneous-treatment-effects-ml-plot-6-1} \end{Schunk}
 }
 \end{figure}
 
@@ -637,7 +653,9 @@ $$
 \begin{figure}
 \centering
 {
-\includegraphics{assets/slides_91-007}
+\begin{Schunk}
+
+\includegraphics[width=0.6\textwidth,height=0.75\textheight,keepaspectratio]{assets/generated/08-heterogeneous-treatment-effects-ml-plot-7-1} \end{Schunk}
 }
 \end{figure}
 
@@ -659,7 +677,7 @@ $$
 
 \begin{itemize}
 \item Now suppose we have joint data, $(Y,X_1, \dots, X_k)$.
-\item We will do the same approach to finding thresholds to minimize prediction error, but we'll want to pick which $X_k$ we use for threshholding, as well. 
+\item We will do the same approach to finding thresholds to minimize prediction error, but we'll want to pick which $X_k$ we use for threshholding, as well.
 \item Generally, we'll define the depth of the tree as 2 or three variables; first we'll split on $X_k$, then we'll split on $X_j$\dots
 \end{itemize}
 
@@ -681,7 +699,7 @@ $$
 \begin{frame}{Regression Trees}
 
 \begin{itemize}
-\item If we want to find a splitting point with respect to something other than mean response, such as treatment effects, we can target the treatment effect estimator instead of $Y_i$. 
+\item If we want to find a splitting point with respect to something other than mean response, such as treatment effects, we can target the treatment effect estimator instead of $Y_i$.
 \end{itemize}
 
 \end{frame}
@@ -721,13 +739,13 @@ $$
 \begin{frame}{An honest tree algorithm}
 
 \begin{enumerate}
-\item Split the sample into two folds. 
-\item Use the first fold to learn splits of the tree. 
-\item Estimate response within leaves using the second fold. 
+\item Split the sample into two folds.
+\item Use the first fold to learn splits of the tree.
+\item Estimate response within leaves using the second fold.
 \end{enumerate}
 
 \begin{itemize}
-\item This can result in some leaves being empty.  Prune them? 
+\item This can result in some leaves being empty.  Prune them?
 \item This procedure reduces bias relative to those proposed by \cite{breiman2001random}.
 \end{itemize}
 
@@ -821,8 +839,8 @@ $$
 \begin{frame}{Policy learning}
 
 \begin{itemize}
-\item Given information about an individual (age, location, education, etc.) which among multiple treatments should they be assigned? 
-\item How do you learn a \textit{policy} that will help you determine how to allocate treatment?  \dots potentially accounting for different costs of treatment. 
+\item Given information about an individual (age, location, education, etc.) which among multiple treatments should they be assigned?
+\item How do you learn a \textit{policy} that will help you determine how to allocate treatment?  \dots potentially accounting for different costs of treatment.
 \end{itemize}
 
 \end{frame}
@@ -839,12 +857,12 @@ $$
 }
 
 %-------------------------------------------------------------------------------%
-\begin{frame}{Matrix completion: the Nexflix problem}
+\begin{frame}{Matrix completion: the Netflix problem}
 
 \begin{itemize}
-\item Netflix has data on viewers, their characteristics, and how they rate movies. 
+\item Netflix has data on viewers, their characteristics, and how they rate movies.
 \item The question: how to best recommend to them movies that they have not yet rated?
-\item The challenge: come up with the best recommendation algorithm, winner gets \$1 million. 
+\item The challenge: come up with the best recommendation algorithm, winner gets \$1 million.
 \item This can be framed as a matrix completion problem: put users on rows, movies on columns, predict all of the missing rankings.
 \end{itemize}
 
@@ -866,8 +884,8 @@ $$
 
 
 \begin{itemize}
-\item Machine learning does not solve the fundamental problem of causal inference. 
-\item Causal interpretations are based on assumptions about the data generating process, or knowledge of assignment procedures. These are outside the realm of machine learning methods. 
+\item Machine learning does not solve the fundamental problem of causal inference.
+\item Causal interpretations are based on assumptions about the data generating process, or knowledge of assignment procedures. These are outside the realm of machine learning methods.
 \end{itemize}
 
 \end{frame}
@@ -888,7 +906,7 @@ $$
 
 \begin{itemize}
 \item ML methods may do a good job of producing estimates, but how do we account for inference?
-\item Cross-validation 
+\item Cross-validation
 \item Bootstrapping
 \end{itemize}
 

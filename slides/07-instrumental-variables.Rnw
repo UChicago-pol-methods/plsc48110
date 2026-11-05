@@ -1,0 +1,654 @@
+% !Rnw weave = knitr
+% Edit 07-instrumental-variables.Rnw; the corresponding .tex is generated.
+\documentclass[xcolor={dvipsnames},handout]{beamer}
+
+\usepackage{assets/pres-template_MOW}
+\usepackage{pdfpages}
+
+%--------------------------------------------------------------------------
+% Specific to this document ---------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%--------------------------------------------------------------------------
+% \setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\tabcolsep}{1.3pt}
+\title{PLSC 48110/28110}
+\subtitle{Lecture 7: Instrumental variables estimation}
+\date{}
+\author{Molly Offer-Westort}
+\institute{Department of Political Science, \\University of Chicago}
+
+
+\usepackage{assets/Sweave}
+\renewcommand{\Sweavesize}{\scriptsize}
+\renewcommand{\Routsize}{\scriptsize}
+\hypersetup{pdftitle={PLSC 48110/28110 - Lecture 7: Instrumental variables estimation},pdfauthor={Molly Offer-Westort},pdfpagemode=UseNone}
+\begin{document}
+<<setup, include=FALSE>>=
+knitr::render_sweave()
+# The existing LaTeX preamble already supplies the Sweave environments.
+knitr::knit_patterns$set(header.begin=NULL)
+knitr::knit_hooks$set(document=function(x) gsub("[ \t]+(?=\n|$)", "", x, perl=TRUE))
+knitr::opts_chunk$set(prompt=TRUE, comment=NA, tidy=FALSE,
+  highlight=FALSE, warning=FALSE, message=FALSE, error=FALSE,
+  fig.path="assets/generated/07-instrumental-variables-",
+  cache.path=".build/cache/07-instrumental-variables/")
+options(width=70)
+@
+
+
+%-------------------------------------------------------------------------------%
+\frame{\titlepage
+\thispagestyle{empty}
+}
+%-------------------------------------------------------------------------------%
+\begin{frame}{Why we like experiments}
+
+\begin{itemize}
+\item Identification comes for free: we can ensure that treatment assignment is independent of potential outcomes.
+\item Methods for analysis and inference are (relatively) straightforward.
+\item However, treatment assignment doesn't guarantee treatment uptake.  (examples: GOTV, de-worming; ethical considerations)
+\item So we may have independence of treatment assignment and potential outcomes, but not \textit{actual} treatment received and potential outcomes.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Noncompliance}
+
+\begin{itemize}
+\item People who opt-out of treatment will often look different, and have different associated experimental responses, as compared to people who will opt-in when treatment is offered.
+\item We can focus just on \textit{intention to treat} (ITT) effects: what is the effect on a group of having treatment offered to them  \textit{whether they take up treatment or not}.
+\item Combination of effects among people who \textit{do} take up treatment when randomized to receive it, and (potentially null) effects among people who \textit{don't}.  (We'll come back to compliance types).
+\item Often these are of policy relevance—for things you can't \textit{force} people to take, it's worth understanding what the average effect of making them available is.  And identification is still good.
+\item However, this might not be a quantity that we're interested in, and when the assignment mechanism would look different in the ``real'' world, external validity may be poor.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Instrument}
+
+\begin{itemize}
+\item With noncompliance when we can't \textit{force} everyone to take treatment, we can consider effects on the subgroup for whom random assignment was effective at moving them to uptake treatment.
+\item Our estimand becomes the "Local Average Treatment Effect" or "Complier Average Treatment Effect."
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Observational data motivation}
+
+\begin{itemize}
+\item Motivation from natural experiments \citep{angrist2001instrumental}
+\item Uses only a part of the variation in the treatment received
+\item Relevance of estimand?  Do we think there is \textbf{heterogeneity} in response?
+\item In observational setting, what is the alternative?
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Instrument}
+
+\begin{itemize}
+\item Call the treatment \textit{assignment} an \textit{instrument} $Z_i\in \{0,1 \}$
+\item Call the treatment \textit{received} $W_i$;
+\begin{itemize}
+\item Treatment \textit{received} is a function of treatment \textit{assigned}: $W_i(Z_i)\in \{0,1 \}$
+\end{itemize}
+\item We can denote  outcomes as a function of treatment assigned and received: $Y_i^{obs} = Y_i(Z_i, W_i(Z_i))$
+% \item By random assignment, $Z_i \independent (Y_i(0), Y_i(1))$  (people \textit{assigned} to treatment look no different, on average, from people \textit{assigned} to control)
+% \begin{itemize}
+% \item (We can relax this to allow for independence conditional on covariates, for example if we're using stratified random assignment.)
+% \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Compliance behavior}
+
+$$
+C_i =
+\begin{cases}
+\text{complier} & W_i(0) = 0,  W_i(1) = 1, \\
+\text{defier} & W_i(0) = 1,  W_i(1) = 0, \\
+\text{always-taker} & W_i(0) = 1,  W_i(1) = 1, \\
+\text{never-taker} & W_i(0) = 0,  W_i(1) = 0
+\end{cases}
+$$
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{IV assumptions}
+
+\begin{itemize}
+\item No defiers (monotonicity): $W_i(1)\ge W_i(0)$  (is this plausible?)
+\item Exclusion restriction: $Y_i(z,w) = Y_i(z',w), \text{ for all } z, z',w $  (is this plausible?)
+\end{itemize}
+
+
+$$
+\Rightarrow Y_i(Z_i,W_i) = Y_i(W_i)
+$$
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{ATE}
+
+\begin{align*}
+\tau^{ate} & = \E[Y_i(1) - Y_i(0)]
+\end{align*}
+
+But
+\begin{align*}
+\E[Y_i(1)] & \neq \E[Y_i^{obs}|Z_i = 1]\neq \E[Y_i^{obs}|W_i = 1]\\
+\E[Y_i(0)] & \neq \E[Y_i^{obs}|Z_i = 0]\neq \E[Y_i^{obs}|W_i = 0]\\
+\end{align*}
+
+
+With noncompliance, ATE is not identified without further assumptions.
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{ITT}
+
+\begin{align*}
+\tau^{itt} & = \E[Y_i(1,W_i(1))] - \E[Y_i(0,W_i(0))] \\
+            & = \E[Y_i(W_i)| Z_i = 1] - \E[Y_i(W_i)| Z_i = 0] \\
+            & = \E[Y_i^{obs} | Z_i = 1] - \E[Y_i^{obs} | Z_i = 0]
+\end{align*}
+
+
+With noncompliance, ITT \textit{is} identified.
+
+
+But it does not necessarily correspond to ATE.
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{LATE}
+
+\begin{align*}
+\tau^{late} & = \E[Y_i(1) - Y_i(0) | C_i = \text{complier}] \\
+            & = \frac{\E[Y_i^{obs} | Z_i = 1] - \E[Y_i^{obs} | Z_i = 0]}{\E[W_i^{obs} | Z_i = 1] - \E[W_i^{obs} | Z_i = 0]}
+\end{align*}
+
+
+
+LATE also does not necessarily correspond to ATE!  Also different from ITT.
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{Estimating methods}
+
+Fabricated data: true treatment effect is 2
+
+<<code-01>>=
+library(fabricatr)
+library(estimatr)
+set.seed(60637)
+dat <- fabricate(
+  N = 1e4,
+  Z = rbinom(N, 1, prob = 0.4),
+  W  = Z * rbinom(N, 1, prob = 0.8),
+  Y = rpois(N, lambda = 4) + W * rpois(N, lambda = 2),
+  X = rnorm(N)
+)
+@
+
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{Estimating methods}
+
+<<code-02>>=
+head(dat)
+@
+
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{Estimating methods: ITT}
+
+Difference in means estimate
+<<code-03>>=
+mean(dat$Y[which(dat$Z == 1)]) -
+  mean(dat$Y[which(dat$Z == 0)])
+@
+
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+
+\begin{frame}[fragile]{Estimating methods: LATE}
+
+\begin{itemize}
+\item Generically:
+\begin{align*}
+\hat \tau^{late} & = \widehat \Cov[Y_i, Z_i] / \widehat \Cov[W_i, Z_i]
+\end{align*}
+\item Wald estimator: With binary instrument, equivalently:
+\begin{align*}
+\hat \tau^{late}
+            & = \frac{\hat \E[Y_i^{obs} | Z_i = 1] - \hat\E[Y_i^{obs} | Z_i = 0]}{\hat\E[W_i^{obs} | Z_i = 1] - \hat\E[W_i^{obs} | Z_i = 0]}
+\end{align*}
+\end{itemize}
+
+
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{Estimating methods: LATE}
+
+\small
+
+<<code-04>>=
+cov(dat$Y, dat$Z)/cov(dat$W, dat$Z)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Estimating methods: LATE (continued)}
+<<code-05>>=
+(numerator <- mean(dat$Y[which(dat$Z == 1)]) -
+   mean(dat$Y[which(dat$Z == 0)]))
+(denominator <- mean(dat$W[which(dat$Z == 1)]) -
+    mean(dat$W[which(dat$Z == 0)]))
+numerator/denominator
+@
+
+
+
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Estimating methods: LATE}
+
+\begin{itemize}
+\item Two-stage least squares: regress treatment realized on instrument (and other instruments, covariates); regress outcome on predicted value of treatment (and control covariates)
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+
+\begin{frame}[fragile]{Estimating methods: LATE}
+
+
+Doing each stage separately:
+\footnotesize
+<<code-06>>=
+dat$W_predicted <- lm_robust(W ~Z, data = dat)$fitted.values
+lm_robust(Y ~ W_predicted, data = dat)
+@
+
+\end{frame}
+
+\begin{frame}[fragile]{Estimating methods: LATE (continued)}
+With \texttt{estimatr}:
+<<code-07>>=
+iv_robust(Y ~ W| Z, data = dat)
+@
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}[fragile]{Estimating methods: LATE}
+
+With covariates:
+
+\scriptsize
+<<code-08>>=
+iv_robust(Y ~ W + X | Z + X, data = dat)
+@
+
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Estimating methods: LATE}
+
+\begin{itemize}
+\item TSLS allows for multiple instruments, covariates
+\item consistent but \textit{not} unbiased
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Possible issues with instruments}
+
+\begin{itemize}
+\item Failure of exogeneity  (examples in the experimental setting?)
+\item Weak instruments
+\begin{itemize}
+\item Diagnose strength using the first stage, $W \sim Z$ (plus any covariates): how strongly does the instrument predict treatment received? Use an appropriate first-stage $F$ statistic.
+\item The reduced form, $Y \sim Z$, estimates the ITT effect; a small effect need not imply a weak instrument.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Alternatives}
+
+\begin{itemize}
+\item Assume unconfoundedness
+$$
+W_i \independent (Y_i(1), Y_i(0)) \rvert X_i
+$$
+\item Estimate average effect for compliers, generalize to population
+\item Test equalities of compliers under treatment, always takers; compliers under control, never-takers; following \cite{athey2017econometrics}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Alternatives}
+
+\begin{itemize}
+\item Sometimes we can also \textit{bound} treatment effects.
+\item Manski bounds: worst case bounds
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+\begin{frame}{Take-aways for experiments}
+
+\begin{itemize}
+\item What is the quantity of interest in your experimental setting?
+\item When would you care about ATE? ITT? LATE?
+\item Is non-compliance likely to be a problem?  (How do you define \textit{compliance}?)
+\item Do you expect compliers and non-compliers to look different?
+\item Do you expect compliers and non-compliers to have different (hypothetical) treatment effects?
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%NOTE%%%%%
+\note{
+\scriptsize \singlespacing
+
+\begin{itemize}
+\item xxxx
+\end{itemize}
+
+}
+
+%-------------------------------------------------------------------------------%
+
+
+\backupbegin
+%-------------------------------------------------------------------------------%
+
+\begin{frame}[allowframebreaks]{References}
+    \bibliographystyle{apalike}
+    \bibliography{assets/bib}
+\end{frame}
+%-------------------------------------------------------------------------------%
+\backupend
+\end{document}
